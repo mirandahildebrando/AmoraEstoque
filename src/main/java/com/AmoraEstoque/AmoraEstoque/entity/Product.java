@@ -22,6 +22,8 @@ public class Product {
 
     private Integer quantity;
 
+    private Integer stock;
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
