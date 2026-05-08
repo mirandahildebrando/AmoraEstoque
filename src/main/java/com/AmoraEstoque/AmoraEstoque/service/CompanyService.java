@@ -22,18 +22,4 @@ public class CompanyService {
     public List<Company> list() {
         return repository.findAll();
     }
-
-    public Company update(Long id, Company company) {
-
-        Company existing = repository.findById(id)
-                .orElseThrow();
-
-        existing.setName(company.getName());
-
-        return repository.save(existing);
-    }
-
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
 }

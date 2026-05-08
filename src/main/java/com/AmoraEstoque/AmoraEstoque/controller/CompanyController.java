@@ -2,7 +2,6 @@ package com.AmoraEstoque.AmoraEstoque.controller;
 
 import com.AmoraEstoque.AmoraEstoque.entity.Company;
 import com.AmoraEstoque.AmoraEstoque.service.CompanyService;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,17 +25,5 @@ public class CompanyController {
     @GetMapping
     public List<Company> list() {
         return service.list();
-    }
-
-    @PutMapping("/{id}")
-    public Company update(@PathVariable Long id,
-                          @RequestBody Company company) {
-
-        return service.update(id, company);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
     }
 }
