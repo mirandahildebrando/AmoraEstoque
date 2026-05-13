@@ -20,8 +20,6 @@ public class Product {
 
     private BigDecimal price;
 
-    private Integer quantity;
-
     private Integer stock;
 
     @ManyToOne
