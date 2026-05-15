@@ -26,4 +26,9 @@ public class AuthController {
     public String login(@RequestBody LoginDTO dto) {
         return service.login(dto);
     }
+
+    @PostMapping("/admin/login")
+    public String adminLogin(@RequestBody LoginDTO dto) {
+        return service.adminLogin(dto);
+    }
 }

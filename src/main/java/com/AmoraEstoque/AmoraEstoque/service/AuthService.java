@@ -26,16 +26,23 @@ public class AuthService {
     public String register(RegisterDTO dto) {
 
         Company company = new Company();
+
         company.setName(dto.getCompanyName());
+
         company.setActive(true);
 
         companyRepository.save(company);
 
         User user = new User();
+
         user.setUsername(dto.getUsername());
+
         user.setEmail(dto.getEmail());
+
         user.setPassword(dto.getPassword());
+
         user.setRole(Role.EMPRESA);
+
         user.setCompany(company);
 
         userRepository.save(user);
@@ -57,5 +64,21 @@ public class AuthService {
         }
 
         return "Login realizado";
+    }
+
+    public String adminLogin(LoginDTO dto) {
+
+        User user = userRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new RuntimeException("Admin não encontrado"));
+
+        if (!user.getPassword().equals(dto.getPassword())) {
+            throw new RuntimeException("Senha inválida");
+        }
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new RuntimeException("Acesso negado");
+        }
+
+        return "Login admin realizado";
     }
 }
