@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.AmoraEstoque.AmoraEstoque.dto.LoginDTO;
 import com.AmoraEstoque.AmoraEstoque.dto.RegisterDTO;
 import com.AmoraEstoque.AmoraEstoque.entity.Company;
+import com.AmoraEstoque.AmoraEstoque.entity.Role;
 import com.AmoraEstoque.AmoraEstoque.entity.User;
 import com.AmoraEstoque.AmoraEstoque.repository.CompanyRepository;
 import com.AmoraEstoque.AmoraEstoque.repository.UserRepository;
@@ -34,7 +35,7 @@ public class AuthService {
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        user.setRole(dto.getRole());
+        user.setRole(Role.EMPRESA);
         user.setCompany(company);
 
         userRepository.save(user);

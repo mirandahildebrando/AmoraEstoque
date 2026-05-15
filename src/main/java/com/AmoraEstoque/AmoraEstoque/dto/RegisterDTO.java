@@ -1,5 +1,7 @@
 package com.AmoraEstoque.AmoraEstoque.dto;
 
+import com.AmoraEstoque.AmoraEstoque.entity.Role;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +10,8 @@ import lombok.Setter;
 public class RegisterDTO {
 
     private String username;
+
+    private String email;
 
     private String password;
 

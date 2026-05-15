@@ -3,6 +3,7 @@ package com.AmoraEstoque.AmoraEstoque.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.AmoraEstoque.AmoraEstoque.entity.Role;
 
 @Entity
 @Table(name = "users")
