@@ -1,5 +1,6 @@
 package com.AmoraEstoque.AmoraEstoque.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,9 +18,12 @@ public class User {
 
     private String username;
 
+    private String email;
+
     private String password;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @ManyToOne
     @JoinColumn(name = "company_id")

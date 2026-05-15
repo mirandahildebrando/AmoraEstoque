@@ -32,8 +32,9 @@ public class AuthService {
 
         User user = new User();
         user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        user.setRole("ADMIN");
+        user.setRole(dto.getRole());
         user.setCompany(company);
 
         userRepository.save(user);

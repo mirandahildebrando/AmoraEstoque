@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import com.AmoraEstoque.AmoraEstoque.entity.Sale;
 import com.AmoraEstoque.AmoraEstoque.service.SaleService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,8 @@ public class SaleController {
     }
 
     @GetMapping
-    public List<Sale> list() {
-        return service.list();
+    public List<Sale> list(@RequestParam(required = false) 
+    LocalDateTime start, @RequestParam(required = false) LocalDateTime end) {
+        return service.list(start, end);
     }
 }
