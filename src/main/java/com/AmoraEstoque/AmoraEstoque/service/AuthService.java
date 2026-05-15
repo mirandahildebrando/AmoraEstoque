@@ -41,7 +41,7 @@ public class AuthService {
 
         user.setPassword(dto.getPassword());
 
-        user.setRole(Role.EMPRESA);
+        user.setRole(Role.ADMIN);
 
         user.setCompany(company);
 
