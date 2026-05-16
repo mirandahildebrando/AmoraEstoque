@@ -14,24 +14,18 @@ import com.AmoraEstoque.AmoraEstoque.repository.UserRepository;
 public class AuthService {
 
     private final UserRepository userRepository;
+
     private final CompanyRepository companyRepository;
 
-    public AuthService(UserRepository userRepository,
-                       CompanyRepository companyRepository) {
+    public AuthService(
+            UserRepository userRepository,
+            CompanyRepository companyRepository) {
 
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
     }
 
     public String register(RegisterDTO dto) {
-
-        Company company = new Company();
-
-        company.setName(dto.getCompanyName());
-
-        company.setActive(true);
-
-        companyRepository.save(company);
 
         User user = new User();
 
@@ -43,7 +37,7 @@ public class AuthService {
 
         user.setRole(Role.ADMIN);
 
-        user.setCompany(company);
+        user.setCompany(null);
 
         userRepository.save(user);
 
@@ -59,8 +53,15 @@ public class AuthService {
             throw new RuntimeException("Senha inválida");
         }
 
-        if (!user.getCompany().getActive()) {
-            throw new RuntimeException("Empresa bloqueada");
+        if (user.getRole() == Role.EMPRESA) {
+
+            if (user.getCompany() == null) {
+                throw new RuntimeException("Empresa inválida");
+            }
+
+            if (!user.getCompany().getActive()) {
+                throw new RuntimeException("Empresa bloqueada");
+            }
         }
 
         return "Login realizado";
