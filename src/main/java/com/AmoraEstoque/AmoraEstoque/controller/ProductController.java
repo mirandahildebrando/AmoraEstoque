@@ -25,7 +25,7 @@ public class ProductController {
         Company company = new Company();
         product.setId(companyId);
         product.setCompany(company);
-        return service.save(product);
+        return service.save(product, companyId);
     }
 
     @GetMapping

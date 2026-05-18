@@ -16,7 +16,8 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public Product save(Product product) {
+    public Product save(Product product, Long companyId) {
+        product.setId(companyId);
         return repository.save(product);
     }
 
