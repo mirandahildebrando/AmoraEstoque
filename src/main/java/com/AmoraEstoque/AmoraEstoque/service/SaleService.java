@@ -55,12 +55,9 @@ public class SaleService {
         return saleRepository.save(sale);
     }
 
-    public List<Sale> list(
-        LocalDateTime start, 
-        LocalDateTime end) {
-        if (start != null && end != null) {
-            return saleRepository.findByCreatedAtBetween(start, end);
-        }
-        return saleRepository.findAll();
+    public List<Sale> listByCompany(Long companyId) {
+        return saleRepository.findByCompanyId(companyId);
     }
+
+    
 }

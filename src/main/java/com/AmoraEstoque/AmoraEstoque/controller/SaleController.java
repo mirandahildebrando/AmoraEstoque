@@ -25,8 +25,7 @@ public class SaleController {
     }
 
     @GetMapping
-    public List<Sale> list(@RequestParam(required = false) 
-    LocalDateTime start, @RequestParam(required = false) LocalDateTime end) {
-        return service.list(start, end);
+    public List<Sale> list(@RequestHeader("companyId") Long companyId) {
+        return service.listByCompany(companyId);
     }
 }

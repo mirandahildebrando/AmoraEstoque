@@ -20,8 +20,8 @@ public class ProductService {
         return repository.save(product);
     }
 
-    public List<Product> list() {
-        return repository.findAll();
+    public List<Product> listByCompany(Long companyId) {
+        return repository.findByCompanyId(companyId);
     }
 
     public void delete(Long id) {
