@@ -1,8 +1,6 @@
 package com.AmoraEstoque.AmoraEstoque.controller;
 
 import org.springframework.web.bind.annotation.*;
-
-import com.AmoraEstoque.AmoraEstoque.entity.Company;
 import com.AmoraEstoque.AmoraEstoque.entity.Product;
 import com.AmoraEstoque.AmoraEstoque.service.ProductService;
 
@@ -20,27 +18,20 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product save(@RequestBody Product product, @RequestHeader("companyId") Long companyId) {
-
-        Company company = new Company();
-        product.setId(companyId);
-        product.setCompany(company);
-        return service.save(product, companyId);
+    public Product save(@RequestBody Product product) {
+        return service.save(product);
     }
 
     @GetMapping
-    public List<Product> list(@RequestHeader("companyId") Long companyId) {
-        return service.listByCompany(companyId);
+    public List<Product> list() {
+        return service.list();
     }
 
     @PutMapping("/{id}")
     public Product update(@PathVariable Long id,
-                          @RequestBody Product product, @RequestHeader("companyId") Long companyId) {
+                          @RequestBody Product product) {
 
-            Company company = new Company();
-            product.setId(companyId);
-            product.setCompany(company);
-            return service.update(id, product);
+        return service.update(id, product);
     }
 
     @DeleteMapping("/{id}")

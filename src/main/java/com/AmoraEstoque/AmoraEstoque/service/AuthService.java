@@ -41,8 +41,6 @@ public class AuthService {
 
         user.setRole(Role.ADMIN);
 
-        user.setCompany(null);
-
         userRepository.save(user);
 
         return "Usuário cadastrado";

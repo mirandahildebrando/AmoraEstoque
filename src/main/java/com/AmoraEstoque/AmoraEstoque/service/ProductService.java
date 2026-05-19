@@ -15,13 +15,19 @@ public class ProductService {
 
     private final LoggedUserService loggedUserService;
 
-    public ProductService(ProductRepository repository, LoggedUserService loggedUserService) {
+    public ProductService(ProductRepository repository,
+                          LoggedUserService loggedUserService) {
+
         this.repository = repository;
         this.loggedUserService = loggedUserService;
     }
 
-    public Product save(Product product, Long companyId) {
-        product.setId(companyId);
+    public Product save(Product product) {
+
+        User user = loggedUserService.getUser();
+
+        product.setCompany(user.getCompany());
+
         return repository.save(product);
     }
 
@@ -34,24 +40,25 @@ public class ProductService {
         return repository.findByCompanyId(companyId);
     }
 
-    public List<Product> listByCompany(Long companyId) {
-        return repository.findByCompanyId(companyId);
-    }
-
     public void delete(Long id) {
         repository.deleteById(id);
     }
 
     public Product update(Long id, Product product) {
+
         Product existingProduct = repository.findById(id).orElse(null);
+
         if (existingProduct != null) {
+
             existingProduct.setName(product.getName());
+
             existingProduct.setPrice(product.getPrice());
+
             existingProduct.setStock(product.getStock());
+
             return repository.save(existingProduct);
-        } else {
-            return null;
         }
-        
+
+        return null;
     }
 }
