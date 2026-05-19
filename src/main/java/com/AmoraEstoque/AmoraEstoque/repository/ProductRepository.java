@@ -9,4 +9,6 @@ import com.AmoraEstoque.AmoraEstoque.entity.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByCompanyId(Long companyId);
+
+    
 }
