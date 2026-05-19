@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.AmoraEstoque.AmoraEstoque.entity.Product;
+import com.AmoraEstoque.AmoraEstoque.entity.User;
 import com.AmoraEstoque.AmoraEstoque.repository.ProductRepository;
 
 @Service
@@ -12,13 +13,25 @@ public class ProductService {
 
     private final ProductRepository repository;
 
-    public ProductService(ProductRepository repository) {
+    private final LoggedUserService loggedUserService;
+
+    public ProductService(ProductRepository repository, LoggedUserService loggedUserService) {
         this.repository = repository;
+        this.loggedUserService = loggedUserService;
     }
 
     public Product save(Product product, Long companyId) {
         product.setId(companyId);
         return repository.save(product);
+    }
+
+    public List<Product> list() {
+
+        User user = loggedUserService.getUser();
+
+        Long companyId = user.getCompany().getId();
+
+        return repository.findByCompanyId(companyId);
     }
 
     public List<Product> listByCompany(Long companyId) {

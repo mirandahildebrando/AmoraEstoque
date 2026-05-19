@@ -17,12 +17,16 @@ public class AuthService {
 
     private final CompanyRepository companyRepository;
 
+    private final LoggedUserService loggedUserService;
+
     public AuthService(
             UserRepository userRepository,
-            CompanyRepository companyRepository) {
+            CompanyRepository companyRepository,
+            LoggedUserService loggedUserService) {
 
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
+        this.loggedUserService = loggedUserService;
     }
 
     public String register(RegisterDTO dto) {
@@ -64,6 +68,7 @@ public class AuthService {
             }
         }
 
+        loggedUserService.setUser(user);
         return "Login realizado";
     }
 
@@ -80,6 +85,7 @@ public class AuthService {
             throw new RuntimeException("Acesso negado");
         }
 
+        loggedUserService.setUser(user);
         return "Login admin realizado";
     }
 }
