@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.AmoraEstoque.AmoraEstoque.dto.LoginDTO;
 import com.AmoraEstoque.AmoraEstoque.dto.RegisterDTO;
-import com.AmoraEstoque.AmoraEstoque.entity.Company;
 import com.AmoraEstoque.AmoraEstoque.entity.Role;
 import com.AmoraEstoque.AmoraEstoque.entity.User;
 import com.AmoraEstoque.AmoraEstoque.repository.CompanyRepository;
@@ -17,16 +16,12 @@ public class AuthService {
 
     private final CompanyRepository companyRepository;
 
-    private final LoggedUserService loggedUserService;
-
     public AuthService(
             UserRepository userRepository,
-            CompanyRepository companyRepository,
-            LoggedUserService loggedUserService) {
+            CompanyRepository companyRepository) {
 
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
-        this.loggedUserService = loggedUserService;
     }
 
     public String register(RegisterDTO dto) {
@@ -46,7 +41,7 @@ public class AuthService {
         return "Usuário cadastrado";
     }
 
-    public String login(LoginDTO dto) {
+    public Long login(LoginDTO dto) {
 
         User user = userRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -55,19 +50,15 @@ public class AuthService {
             throw new RuntimeException("Senha inválida");
         }
 
-        if (user.getRole() == Role.EMPRESA) {
-
-            if (user.getCompany() == null) {
-                throw new RuntimeException("Empresa inválida");
-            }
-
-            if (!user.getCompany().getActive()) {
-                throw new RuntimeException("Empresa bloqueada");
-            }
+        if (user.getCompany() == null) {
+            throw new RuntimeException("Usuário sem empresa");
         }
 
-        loggedUserService.setUser(user);
-        return "Login realizado";
+        if (!user.getCompany().getActive()) {
+            throw new RuntimeException("Empresa bloqueada");
+        }
+
+        return user.getCompany().getId();
     }
 
     public String adminLogin(LoginDTO dto) {
@@ -83,7 +74,6 @@ public class AuthService {
             throw new RuntimeException("Acesso negado");
         }
 
-        loggedUserService.setUser(user);
         return "Login admin realizado";
     }
 }

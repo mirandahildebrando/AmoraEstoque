@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.AmoraEstoque.AmoraEstoque.entity.Company;
 import com.AmoraEstoque.AmoraEstoque.entity.Product;
-import com.AmoraEstoque.AmoraEstoque.entity.User;
 import com.AmoraEstoque.AmoraEstoque.repository.ProductRepository;
 
 @Service
@@ -13,61 +13,46 @@ public class ProductService {
 
     private final ProductRepository repository;
 
-    private final LoggedUserService loggedUserService;
-
-    public ProductService(ProductRepository repository,
-                          LoggedUserService loggedUserService) {
+    public ProductService(ProductRepository repository) {
 
         this.repository = repository;
-        this.loggedUserService = loggedUserService;
     }
 
-    public Product save(Product product) {
+    public Product save(Product product, Long companyId) {
 
-        User user = loggedUserService.getUser();
+        Company company = new Company();
 
-        product.setCompany(user.getCompany());
+        company.setId(companyId);
+
+        product.setCompany(company);
 
         return repository.save(product);
     }
 
-    public List<Product> list() {
-
-        User user = loggedUserService.getUser();
-
-        Long companyId = user.getCompany().getId();
+    public List<Product> list(Long companyId) {
 
         return repository.findByCompanyId(companyId);
     }
 
-    public Product update(Long id, Product product) {
-
-        User user = loggedUserService.getUser();
-
-        Product existingProduct = repository.findById(id).orElseThrow(() -> 
-        new RuntimeException("Produto não encontrado"));
-
-        if (!existingProduct.getCompany().getId().equals(user.getCompany().getId())) {
-            throw new RuntimeException("Produto não pertence à empresa");
-        }
-
-        existingProduct.setName(product.getName());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setStock(product.getStock());
-
-        return repository.save(existingProduct);
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 
-        public void delete(Long id) {
+    public Product update(Long id, Product product) {
 
-            User user = loggedUserService.getUser();
+        Product existingProduct = repository.findById(id).orElse(null);
 
-            Product product = repository.findById(id).orElseThrow(() -> 
-            new RuntimeException("Produto não encontrado"));
-            if (!product.getCompany().getId().equals(user.getCompany().getId())) {
-                throw new RuntimeException("Produto não pertence à empresa");
-            }
+        if (existingProduct != null) {
 
-        repository.deleteById(id);
+            existingProduct.setName(product.getName());
+
+            existingProduct.setPrice(product.getPrice());
+
+            existingProduct.setStock(product.getStock());
+
+            return repository.save(existingProduct);
+        }
+
+        return null;
     }
 }

@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import com.AmoraEstoque.AmoraEstoque.dto.LoginDTO;
 import com.AmoraEstoque.AmoraEstoque.dto.RegisterDTO;
 import com.AmoraEstoque.AmoraEstoque.service.AuthService;
-import com.AmoraEstoque.AmoraEstoque.service.LoggedUserService;
 
 @RestController
 @RequestMapping("/auth")
@@ -14,11 +13,8 @@ public class AuthController {
 
     private final AuthService service;
 
-    private final LoggedUserService loggedUserService;
-
-    public AuthController(AuthService service, LoggedUserService loggedUserService) {
+    public AuthController(AuthService service) {
         this.service = service;
-        this.loggedUserService = loggedUserService;
     }
 
     @PostMapping("/register")
@@ -27,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDTO dto) {
+    public Long login(@RequestBody LoginDTO dto) {
         return service.login(dto);
     }
 
