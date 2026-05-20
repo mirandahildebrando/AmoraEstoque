@@ -50,6 +50,10 @@ public class AuthService {
             throw new RuntimeException("Senha inválida");
         }
 
+        if (user.getRole() == Role.ADMIN) {
+            return 0L;
+        }
+
         if (user.getCompany() == null) {
             throw new RuntimeException("Usuário sem empresa");
         }
