@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import com.AmoraEstoque.AmoraEstoque.entity.Sale;
 import com.AmoraEstoque.AmoraEstoque.service.SaleService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController

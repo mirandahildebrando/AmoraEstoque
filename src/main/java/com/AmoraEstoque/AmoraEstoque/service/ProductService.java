@@ -40,25 +40,34 @@ public class ProductService {
         return repository.findByCompanyId(companyId);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
-
     public Product update(Long id, Product product) {
 
-        Product existingProduct = repository.findById(id).orElse(null);
+        User user = loggedUserService.getUser();
 
-        if (existingProduct != null) {
+        Product existingProduct = repository.findById(id).orElseThrow(() -> 
+        new RuntimeException("Produto não encontrado"));
 
-            existingProduct.setName(product.getName());
-
-            existingProduct.setPrice(product.getPrice());
-
-            existingProduct.setStock(product.getStock());
-
-            return repository.save(existingProduct);
+        if (!existingProduct.getCompany().getId().equals(user.getCompany().getId())) {
+            throw new RuntimeException("Produto não pertence à empresa");
         }
 
-        return null;
+        existingProduct.setName(product.getName());
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setStock(product.getStock());
+
+        return repository.save(existingProduct);
+    }
+
+        public void delete(Long id) {
+
+            User user = loggedUserService.getUser();
+
+            Product product = repository.findById(id).orElseThrow(() -> 
+            new RuntimeException("Produto não encontrado"));
+            if (!product.getCompany().getId().equals(user.getCompany().getId())) {
+                throw new RuntimeException("Produto não pertence à empresa");
+            }
+
+        repository.deleteById(id);
     }
 }
