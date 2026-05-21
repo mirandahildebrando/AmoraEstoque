@@ -9,7 +9,6 @@ import com.AmoraEstoque.AmoraEstoque.service.ProductService;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin(origins = "*", allowCredentials = "false")
 public class ProductController {
 
     private final ProductService service;

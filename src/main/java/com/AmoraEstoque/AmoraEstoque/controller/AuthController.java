@@ -10,7 +10,6 @@ import com.AmoraEstoque.AmoraEstoque.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*", allowCredentials = "false")
 public class AuthController {
 
     private final AuthService service;
