@@ -1,5 +1,6 @@
 package com.AmoraEstoque.AmoraEstoque.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.AmoraEstoque.AmoraEstoque.dto.LoginDTO;
@@ -18,17 +19,28 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterDTO dto) {
-        return service.register(dto);
+    public ResponseEntity<String> register(@RequestBody RegisterDTO dto) {
+        return ResponseEntity.ok(service.register(dto));
     }
 
     @PostMapping("/login")
-    public Long login(@RequestBody LoginDTO dto) {
-        return service.login(dto);
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+        try {
+            Long companyId = service.login(dto);
+            return ResponseEntity.ok(companyId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(403).body(e.getMessage());
+        }
     }
 
     @PostMapping("/admin/login")
-    public String adminLogin(@RequestBody LoginDTO dto) {
-        return service.adminLogin(dto);
+    public ResponseEntity<?> adminLogin(@RequestBody LoginDTO dto) {
+        try {
+            return ResponseEntity.ok(service.adminLogin(dto));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 }
