@@ -1,5 +1,6 @@
 package com.AmoraEstoque.AmoraEstoque.controller;
 
+import com.AmoraEstoque.AmoraEstoque.dto.CompanyResponseDTO;
 import com.AmoraEstoque.AmoraEstoque.entity.Company;
 import com.AmoraEstoque.AmoraEstoque.service.CompanyService;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class CompanyController {
     }
 
     @PostMapping
-    public Company save(@RequestBody Company company) {
+    public CompanyResponseDTO save(@RequestBody Company company) {
         return service.save(company);
     }
 
