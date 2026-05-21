@@ -1,9 +1,7 @@
 package com.AmoraEstoque.AmoraEstoque.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-import com.AmoraEstoque.AmoraEstoque.entity.Role;
 
 @Entity
 @Table(name = "users")
@@ -26,7 +24,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 }
