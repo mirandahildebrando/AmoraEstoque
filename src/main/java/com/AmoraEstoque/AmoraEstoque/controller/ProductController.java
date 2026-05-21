@@ -1,15 +1,15 @@
 package com.AmoraEstoque.AmoraEstoque.controller;
 
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.AmoraEstoque.AmoraEstoque.entity.Product;
 import com.AmoraEstoque.AmoraEstoque.service.ProductService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/products")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowCredentials = "false")
 public class ProductController {
 
     private final ProductService service;
@@ -18,31 +18,56 @@ public class ProductController {
         this.service = service;
     }
 
-    @PostMapping
-    public Product save(
-            @RequestBody Product product,
-            @RequestHeader("companyId") Long companyId) {
+    
+    private Long getCompanyId(HttpSession session) {
+        Long companyId = (Long) session.getAttribute("companyId");
+        if (companyId == null) {
+            throw new IllegalStateException("Não autenticado. Faça login primeiro.");
+        }
+        return companyId;
+    }
 
-        return service.save(product, companyId);
+    @PostMapping
+    public ResponseEntity<?> save(@RequestBody Product product, HttpSession session) {
+        try {
+            Long companyId = getCompanyId(session);
+            return ResponseEntity.ok(service.save(product, companyId));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public List<Product> list(
-            @RequestHeader("companyId") Long companyId) {
-
-        return service.list(companyId);
+    public ResponseEntity<?> list(HttpSession session) {
+        try {
+            Long companyId = getCompanyId(session);
+            return ResponseEntity.ok(service.list(companyId));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public Product update(
+    public ResponseEntity<?> update(
             @PathVariable Long id,
-            @RequestBody Product product) {
-
-        return service.update(id, product);
+            @RequestBody Product product,
+            HttpSession session) {
+        try {
+            getCompanyId(session); 
+            return ResponseEntity.ok(service.update(id, product));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public ResponseEntity<?> delete(@PathVariable Long id, HttpSession session) {
+        try {
+            getCompanyId(session); 
+            service.delete(id);
+            return ResponseEntity.ok("Produto deletado");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 }
