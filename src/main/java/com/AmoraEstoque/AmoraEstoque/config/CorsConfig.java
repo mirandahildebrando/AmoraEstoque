@@ -15,11 +15,13 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                            "https://coreui-free-angular-admin-template-ivory.vercel.app"
+                            "http://localhost:3000",
+                            "http://localhost:3001",
+                            "http://localhost:3002"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true); // obrigatório para sessão funcionar
+                        .allowCredentials(true);
             }
         };
     }
