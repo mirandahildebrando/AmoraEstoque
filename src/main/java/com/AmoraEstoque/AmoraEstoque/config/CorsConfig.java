@@ -17,12 +17,12 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
 
                 registry.addMapping("/**")
-
                         .allowedOrigins(
                                 "http://localhost:3000",
+                                "http://localhost:3001",
+                                "http://localhost:3002",
                                 "https://amora-estoque-frontend.vercel.app"
                         )
-
                         .allowedMethods(
                                 "GET",
                                 "POST",
@@ -30,12 +30,9 @@ public class CorsConfig {
                                 "DELETE",
                                 "OPTIONS"
                         )
-
                         .allowedHeaders("*")
+                        .allowCredentials(true);
 
-                        .exposedHeaders("*")
-
-                        .allowCredentials(false);
             }
         };
     }
