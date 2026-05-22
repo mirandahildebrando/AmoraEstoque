@@ -1,6 +1,5 @@
 package com.AmoraEstoque.AmoraEstoque.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +23,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
         try {
             Long companyId = service.login(dto);
-
-            
-            session.setAttribute("companyId", companyId);
-
             return ResponseEntity.ok(companyId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(e.getMessage());
@@ -40,16 +35,14 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        session.invalidate(); 
+    public ResponseEntity<String> logout() {
         return ResponseEntity.ok("Logout realizado");
     }
 
     @PostMapping("/admin/login")
-    public ResponseEntity<?> adminLogin(@RequestBody LoginDTO dto, HttpSession session) {
+    public ResponseEntity<?> adminLogin(@RequestBody LoginDTO dto) {
         try {
             String resultado = service.adminLogin(dto);
-            session.setAttribute("companyId", 0L); 
             return ResponseEntity.ok(resultado);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(e.getMessage());

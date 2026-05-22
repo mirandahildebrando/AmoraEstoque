@@ -1,39 +1,33 @@
 package com.AmoraEstoque.AmoraEstoque.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.core.Ordered;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CorsConfig {
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(false);
+        config.addAllowedOriginPattern("http://localhost:*");
+        config.addAllowedOriginPattern("https://amora-estoque-frontend.vercel.app");
+        config.addAllowedOriginPattern("https://*.vercel.app");
+        config.addAllowedHeader(CorsConfiguration.ALL);
+        config.addAllowedMethod(CorsConfiguration.ALL);
+        config.setMaxAge(3600L);
 
-        return new WebMvcConfigurer() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
 
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-
-                registry.addMapping("/**")
-                        .allowedOrigins(
-                                "http://localhost:3000",
-                                "http://localhost:3001",
-                                "http://localhost:3002",
-                                "https://amora-estoque-frontend.vercel.app"
-                        )
-                        .allowedMethods(
-                                "GET",
-                                "POST",
-                                "PUT",
-                                "DELETE",
-                                "OPTIONS"
-                        )
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-
-            }
-        };
+        FilterRegistrationBean<CorsFilter> registration =
+                new FilterRegistrationBean<>(new CorsFilter(source));
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return registration;
     }
 }
