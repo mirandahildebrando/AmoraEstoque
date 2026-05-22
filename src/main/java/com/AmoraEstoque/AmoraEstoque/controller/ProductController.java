@@ -1,6 +1,5 @@
 package com.AmoraEstoque.AmoraEstoque.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +8,7 @@ import com.AmoraEstoque.AmoraEstoque.service.ProductService;
 
 @RestController
 @RequestMapping("/products")
+@CrossOrigin("*")
 public class ProductController {
 
     private final ProductService service;
@@ -17,31 +17,44 @@ public class ProductController {
         this.service = service;
     }
 
-    
-    private Long getCompanyId(HttpSession session) {
-        Long companyId = (Long) session.getAttribute("companyId");
-        if (companyId == null) {
-            throw new IllegalStateException("Não autenticado. Faça login primeiro.");
+    private Long getCompanyId(String companyIdHeader) {
+
+        if (companyIdHeader == null || companyIdHeader.isEmpty()) {
+            throw new IllegalStateException("Não autenticado");
         }
-        return companyId;
+
+        return Long.parseLong(companyIdHeader);
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Product product, HttpSession session) {
+    public ResponseEntity<?> save(
+            @RequestBody Product product,
+            @RequestHeader(value = "companyId", required = false) String companyIdHeader) {
+
         try {
-            Long companyId = getCompanyId(session);
+
+            Long companyId = getCompanyId(companyIdHeader);
+
             return ResponseEntity.ok(service.save(product, companyId));
-        } catch (IllegalStateException e) {
+
+        } catch (Exception e) {
+
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }
 
     @GetMapping
-    public ResponseEntity<?> list(HttpSession session) {
+    public ResponseEntity<?> list(
+            @RequestHeader(value = "companyId", required = false) String companyIdHeader) {
+
         try {
-            Long companyId = getCompanyId(session);
+
+            Long companyId = getCompanyId(companyIdHeader);
+
             return ResponseEntity.ok(service.list(companyId));
-        } catch (IllegalStateException e) {
+
+        } catch (Exception e) {
+
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }
@@ -50,22 +63,35 @@ public class ProductController {
     public ResponseEntity<?> update(
             @PathVariable Long id,
             @RequestBody Product product,
-            HttpSession session) {
+            @RequestHeader(value = "companyId", required = false) String companyIdHeader) {
+
         try {
-            getCompanyId(session); 
+
+            getCompanyId(companyIdHeader);
+
             return ResponseEntity.ok(service.update(id, product));
-        } catch (IllegalStateException e) {
+
+        } catch (Exception e) {
+
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id, HttpSession session) {
+    public ResponseEntity<?> delete(
+            @PathVariable Long id,
+            @RequestHeader(value = "companyId", required = false) String companyIdHeader) {
+
         try {
-            getCompanyId(session); 
+
+            getCompanyId(companyIdHeader);
+
             service.delete(id);
+
             return ResponseEntity.ok("Produto deletado");
-        } catch (IllegalStateException e) {
+
+        } catch (Exception e) {
+
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }
