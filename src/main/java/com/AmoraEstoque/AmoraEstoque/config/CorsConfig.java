@@ -18,7 +18,10 @@ public class CorsConfig {
 
                 registry.addMapping("/**")
                         .allowedOrigins(
-                                "https://amora-estoque-front.vercel.app"
+                                "http://localhost:3000",
+                                "http://localhost:3001",
+                                "http://localhost:3002",
+                                "https://amora-estoque-frontend.vercel.app"
                         )
                         .allowedMethods("*")
                         .allowedHeaders("*")
